@@ -1,0 +1,68 @@
+[project]
+name = "aws-blackbelt-mcp-server"
+version = "0.1.0"
+description = "Model Context Protocol (MCP) server for AWS Black Belt Online Seminar"
+readme = "README.md"
+requires-python = ">=3.13"
+license = {text = "Apache-2.0"}
+dependencies = [
+    "fastmcp>=2.12.3",
+    "loguru>=0.7.3",
+]
+
+[project.scripts]
+"aws-blackbelt-mcp-server" = "aws_blackbelt_mcp_server.server:main"
+"inspect" = "aws_blackbelt_mcp_server.scripts.inspect:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aws_blackbelt_mcp_server"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+follow_untyped_imports = true
+ignore_missing_imports = false
+
+[tool.ruff]
+line-length = 120
+include = ["src/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+select = [
+  "B",   # flake8-bugbear
+  "D",   # pydocstyle
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "G",   # logging format
+  "I",   # isort
+  "LOG", # logging
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D"]
+"!src/**/*.py" = ["D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
