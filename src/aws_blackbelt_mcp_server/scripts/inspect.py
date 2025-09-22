@@ -2,17 +2,24 @@
 
 import subprocess
 import sys
-from pathlib import Path
+
+from aws_blackbelt_mcp_server.helpers import path_resolver
+
+
+def run_inspector() -> int:
+    """Run the MCP inspector for aws-blackbelt-mcp-server."""
+    project_root = path_resolver.get_project_root()
+    cmd = ["npx", "@modelcontextprotocol/inspector", "uv", "run", "aws-blackbelt-mcp-server"]
+
+    result = subprocess.run(cmd, cwd=project_root, check=False)
+    return result.returncode
 
 
 def main() -> None:
     """Run MCP Inspector with the server."""
     try:
-        project_root = Path(__file__).parent.parent.parent.parent
-
-        cmd = ["npx", "@modelcontextprotocol/inspector", "uv", "run", "aws-blackbelt-mcp-server"]
-        result = subprocess.run(cmd, cwd=project_root, check=False)
-        sys.exit(result.returncode)
+        exit_code = run_inspector()
+        sys.exit(exit_code)
 
     except FileNotFoundError:
         print("Error: npx not found. Please install Node.js and npm.", file=sys.stderr)
