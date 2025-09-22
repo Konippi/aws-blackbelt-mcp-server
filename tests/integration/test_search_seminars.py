@@ -13,7 +13,9 @@ async def test_search_seminars():
         res = await client.call_tool("search_seminars", params)
 
         assert res.is_error is False
-        assert len(res.structured_content["result"]) == 1
+
+        content = res.structured_content
+        assert content is not None and len(content["result"]) == 1
 
 
 @pytest.mark.asyncio
@@ -24,7 +26,9 @@ async def test_return_empty_list_when_no_seminars_exist():
         res = await client.call_tool("search_seminars", params)
 
         assert res.is_error is False
-        assert len(res.structured_content["result"]) == 0
+
+        content = res.structured_content
+        assert content is not None and len(content["result"]) == 0
 
 
 @pytest.mark.asyncio
