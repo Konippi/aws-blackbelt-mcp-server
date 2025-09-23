@@ -2,10 +2,6 @@
 
 import os
 
-# Server configuration
-HOST = os.getenv("AWS_BLACKBELT_MCP_SERVER_HOST", "127.0.0.1")
-PORT = int(os.getenv("AWS_BLACKBELT_MCP_SERVER_PORT", 8000))
-
 # API configuration
 AWS_API_BASE_URL = "https://aws.amazon.com/api"
 API_TIMEOUT = float(os.getenv("API_TIMEOUT", "30.0"))
