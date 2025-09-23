@@ -25,7 +25,7 @@ def _extract_categories_from_tags(tags: List[Dict[str, Any]]) -> List[str]:
 
 def _extract_youtube_url(body: str) -> Optional[str]:
     """Extract YouTube URL from body text and normalize to standard format."""
-    if not body or not ("youtu.be" in body or "youtube.com" in body):
+    if not body or "youtu.be" not in body:
         return None
 
     match = re.search(YOUTUBE_REGEX, body)
