@@ -11,12 +11,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      all-cov-report:
-        type: boolean
-        description: Run all tests and generate coverage report
-        required: false
-        default: false
 
 permissions: {}
 
@@ -58,7 +52,6 @@ jobs:
         with:
           pytest-xml-coverage-path: ./pytest-coverage.xml
           junitxml-path: ./pytest-junit.xml
-          report-only-changed-files: ${{ !inputs.all-cov-report }}
 
       - name: Update README
         run: |
