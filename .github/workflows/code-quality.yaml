@@ -1,4 +1,4 @@
-name: Python
+name: Code Quality
 
 on:
   pull_request:
