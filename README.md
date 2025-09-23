@@ -31,8 +31,8 @@ Python 3.10 or higher is required.
 
 For use with Amazon Q Developer CLI, add the following configuration to your MCP settings file:
 
-**Workspace-level configuration**: `.aws/amazonq/cli-agents/default.json`
-**User-level configuration**: `~/.aws/amazonq/cli-agents/default.json`
+- **Workspace-level configuration**: `.aws/amazonq/cli-agents/default.json`
+- **User-level configuration**: `~/.aws/amazonq/cli-agents/default.json`
 
 ```json
 {
