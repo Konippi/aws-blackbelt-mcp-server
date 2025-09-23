@@ -49,7 +49,6 @@ wheels = [
 
 [[package]]
 name = "aws-blackbelt-mcp-server"
-version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastmcp" },
