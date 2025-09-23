@@ -7,14 +7,14 @@ import sys
 from fastmcp import FastMCP
 from loguru import logger
 
-from aws_blackbelt_mcp_server.config import LOG_RETENTION, LOG_ROTATION, SERVER_LOG_LEVEL
+from aws_blackbelt_mcp_server.config import env
 from aws_blackbelt_mcp_server.helpers.path_resolver import get_log_file_path
 
 # Initialize logger
 logger.remove()
-logger.add(sys.stderr, level=SERVER_LOG_LEVEL)
+logger.add(sys.stderr, level=env.server_log_level)
 log_file = get_log_file_path()
-logger.add(log_file, rotation=LOG_ROTATION, retention=LOG_RETENTION)
+logger.add(log_file, rotation=env.log_rotation, retention=env.log_retention)
 
 
 def load_tools() -> None:
@@ -36,7 +36,7 @@ load_tools()
 def main():
     """Main entry point for AWS Black Belt MCP server."""
     logger.info("Starting AWS Black Belt MCP Server...")
-    mcp.run()
+    mcp.run(transport=env.transport)
 
 
 if __name__ == "__main__":
