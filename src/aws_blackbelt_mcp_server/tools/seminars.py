@@ -65,8 +65,6 @@ async def search_seminars(
 
     try:
         logger.info(f"Searching Black Belt seminars with query: {query}")
-        logger.info(f"Request URL: {AWS_API_BASE_URL}/{search_endpoint}")
-        logger.info(f"Request params: {params}")
 
         async with httpx.AsyncClient(base_url=AWS_API_BASE_URL, timeout=API_TIMEOUT) as client:
             response = await client.get(search_endpoint, params=params)
