@@ -1,3 +1,9 @@
+[![GitHub](https://img.shields.io/badge/GitHub-Konippi/aws--blackbelt--mcp--server-red?style=flat&logo=github)](https://github.com/Konippi/aws-blackbelt-mcp-server)
+[![CI](https://github.com/Konippi/aws-blackbelt-mcp-server/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/Konippi/aws-blackbelt-mcp-server/actions/workflows/test.yaml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-yellow)](LICENSE)
+![PyPI version](https://img.shields.io/pypi/v/aws-blackbelt-mcp-server?color=blue)
+![Python versions](https://img.shields.io/badge/python-3.10_|_3.11_|_3.12_|_3.13-blue)
+
 <!-- Pytest Coverage Comment:Begin -->
 <a href="https://github.com/Konippi/aws-blackbelt-mcp-server/blob/main/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-92%25-brightgreen.svg" /></a><details><summary>Coverage Report • </summary><table><tr><th>File</th><th>Stmts</th><th>Miss</th><th>Cover</th><th>Missing</th></tr><tbody><tr><td><b>TOTAL</b></td><td><b>140</b></td><td><b>11</b></td><td><b>92%</b></td><td>&nbsp;</td></tr></tbody></table><i>report-only-changed-files is enabled. No files were changed during this commit :)</i></details>
 <!-- Pytest Coverage Comment:End -->
