@@ -1,12 +1,27 @@
 """Configuration for the server."""
 
-import os
+from fastmcp.server.server import Transport
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
-# API configuration
+# Constants
 AWS_API_BASE_URL = "https://aws.amazon.com/api"
-API_TIMEOUT = float(os.getenv("API_TIMEOUT", "30.0"))
 
-# Logging configuration
-SERVER_LOG_LEVEL = os.getenv("SERVER_LOG_LEVEL", "INFO")
-LOG_ROTATION = os.getenv("LOG_ROTATION", "10 MB")
-LOG_RETENTION = os.getenv("LOG_RETENTION", "7 days")
+
+# Environment variables
+class _Env(BaseSettings):
+    """Environment variables."""
+
+    # API configuration
+    api_timeout: float = Field(default=30.0)
+
+    # Server configuration
+    transport: Transport = Field(default="stdio")
+
+    # Logging configuration
+    server_log_level: str = Field(default="INFO")
+    log_rotation: str = Field(default="10 MB")
+    log_retention: str = Field(default="7 days")
+
+
+env = _Env()

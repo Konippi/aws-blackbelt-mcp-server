@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Literal, Optional
 import httpx
 from loguru import logger
 
-from aws_blackbelt_mcp_server.config import API_TIMEOUT, AWS_API_BASE_URL
+from aws_blackbelt_mcp_server.config import AWS_API_BASE_URL, env
 from aws_blackbelt_mcp_server.server import mcp
 
 YOUTUBE_REGEX = r'href="(https://youtu\.be/[^"]+)"'
@@ -66,7 +66,7 @@ async def search_seminars(
     try:
         logger.info(f"Searching Black Belt seminars with query: {query}")
 
-        async with httpx.AsyncClient(base_url=AWS_API_BASE_URL, timeout=API_TIMEOUT) as client:
+        async with httpx.AsyncClient(base_url=AWS_API_BASE_URL, timeout=env.api_timeout) as client:
             response = await client.get(search_endpoint, params=params)
             response.raise_for_status()
             data = response.json()
