@@ -1,15 +1,24 @@
 """Black Belt search tool implementation."""
 
 import re
-from typing import Any, Dict, List, Literal, Optional
+from typing import Annotated, Any, Dict, List, Literal, Optional
 
 import httpx
+from fastmcp.tools.tool import ToolResult
 from loguru import logger
+from mcp.types import TextContent
+from pydantic import Field
 
-from aws_blackbelt_mcp_server.config import AWS_API_BASE_URL, env
+from aws_blackbelt_mcp_server.config import env
 from aws_blackbelt_mcp_server.server import mcp
 
+AWS_API_BASE_URL = "https://aws.amazon.com/api"
 YOUTUBE_REGEX = r'href="(https://youtu\.be/[^"]+)"'
+
+SEMINAR_DIRECTORY_ID = "events-cards-interactive-event-content-japan"
+SEMINAR_LOCALE = "ja_JP"
+SEMINAR_QUERY_OPERATOR = "AND"
+SEMINAR_SORT_BY = "item.additionalFields.publishedDate"
 
 
 def _extract_categories_from_tags(tags: List[Dict[str, Any]]) -> List[str]:
@@ -37,10 +46,19 @@ def _extract_youtube_url(body: str) -> Optional[str]:
 
 @mcp.tool()
 async def search_seminars(
-    query: str,
-    sort_order: Optional[Literal["asc", "desc"]] = "desc",
-    limit: Optional[int] = 10,
-) -> List[Dict[str, Any]]:
+    query: Annotated[
+        str,
+        Field(description="Search keyword"),
+    ],
+    sort_order: Annotated[
+        Optional[Literal["asc", "desc"]],
+        Field(description="Sort order", default="desc"),
+    ],
+    limit: Annotated[
+        Optional[int],
+        Field(description="Max results", default=10, ge=1, le=50),
+    ],
+) -> ToolResult:
     """Search AWS Black Belt seminars by keyword.
 
     Args:
@@ -51,14 +69,12 @@ async def search_seminars(
     Returns:
         List of seminar information including title, date, PDF and YouTube links
     """
-    search_endpoint = "dirs/items/search"
-
     params = {
-        "item.directoryId": "events-cards-interactive-event-content-japan",
-        "item.locale": "ja_JP",
+        "item.directoryId": SEMINAR_DIRECTORY_ID,
+        "item.locale": SEMINAR_LOCALE,
         "q": query,
-        "q_operator": "AND",
-        "sort_by": "item.additionalFields.publishedDate",
+        "q_operator": SEMINAR_QUERY_OPERATOR,
+        "sort_by": SEMINAR_SORT_BY,
         "sort_order": sort_order,
         "size": limit,
     }
@@ -67,7 +83,7 @@ async def search_seminars(
         logger.info(f"Searching Black Belt seminars with query: {query}")
 
         async with httpx.AsyncClient(base_url=AWS_API_BASE_URL, timeout=env.api_timeout) as client:
-            response = await client.get(search_endpoint, params=params)
+            response = await client.get("dirs/items/search", params=params)
             response.raise_for_status()
             data = response.json()
 
@@ -98,8 +114,16 @@ async def search_seminars(
                     continue
 
             logger.info(f"Found {len(results)} seminars")
-            return results
+
+            return ToolResult(
+                content=TextContent(type="text", text=f"Found {len(results)} seminars related to {query}"),
+                structured_content={"result": results},
+            )
 
     except Exception as e:
         logger.error(f"Search failed: {e}")
-        return []
+
+        return ToolResult(
+            content=TextContent(type="text", text=f"Search failed: {e}"),
+            structured_content={"result": []},
+        )

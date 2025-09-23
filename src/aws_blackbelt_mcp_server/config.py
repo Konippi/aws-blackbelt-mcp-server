@@ -4,11 +4,7 @@ from fastmcp.server.server import Transport
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
-# Constants
-AWS_API_BASE_URL = "https://aws.amazon.com/api"
 
-
-# Environment variables
 class _Env(BaseSettings):
     """Environment variables."""
 
