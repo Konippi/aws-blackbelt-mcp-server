@@ -39,9 +39,7 @@ For use with Amazon Q Developer CLI, add the following configuration to your MCP
   "mcpServers": {
     "aws-blackbelt-mcp-server": {
       "command": "uvx",
-      "args": ["aws-blackbelt-mcp-server"],
-      "disabled": false,
-      "autoApprove": []
+      "args": ["aws-blackbelt-mcp-server==0.1.0rc1"]
     }
   },
   "tools": [
