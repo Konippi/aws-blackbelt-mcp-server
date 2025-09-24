@@ -154,10 +154,10 @@ async def get_seminar_transcript(
     ],
     language: Annotated[
         str,
-        Field(description="Language code for transcript (e.g., 'ja', 'en')", default="ja"),
+        Field(description="Language code for transcript (e.g., 'ja')", default="ja"),
     ],
 ) -> ToolResult:
-    """Get transcript from seminar video.
+    """Get transcript from seminar video. Note: Supported only in Japanese.
 
     Args:
         ctx: Context to access MCP features
