@@ -1,7 +1,5 @@
 """AWS Black Belt MCP Server."""
 
-import importlib
-import pkgutil
 import sys
 
 from fastmcp import FastMCP
@@ -17,20 +15,18 @@ log_file = get_log_file_path()
 logger.add(log_file, rotation=env.log_rotation, retention=env.log_retention)
 
 
-def load_tools() -> None:
-    """Load tools."""
-    import aws_blackbelt_mcp_server.tools as tools_pkg
+def register_tools() -> None:
+    """Register all tools."""
+    from aws_blackbelt_mcp_server.tools import seminars
 
-    for _, module, _ in pkgutil.iter_modules(tools_pkg.__path__):
-        importlib.import_module(f"aws_blackbelt_mcp_server.tools.{module}")
-        logger.info(f"Loaded tool module: {module}")
+    seminars.register_tools(mcp)
 
 
 # Initialize MCP server
 mcp = FastMCP(name="AWS Black Belt MCP Server")
 
-# Load tools
-load_tools()
+# Register tools
+register_tools()
 
 
 def main():
