@@ -12,28 +12,26 @@
 
 A Model Context Protocol (MCP) server that provides search functionality for AWS Black Belt Online Seminars.
 
-## Key Features
-
-- **Seminar Search**: Search AWS Black Belt Online Seminars by keywords
-
 ### Tools
 
 1. `search_seminars`: Search AWS Black Belt Online Seminars by keywords
+2. `get_seminar_transcript`: Get transcript from seminar YouTube videos (Supported only in Japanese)
 
 ### Current Information Sources
 
 - AWS Black Belt Online Seminars
 - PDF materials
 - YouTube videos
-- Technical category information
+- Seminar transcripts
 
 ## Prerequisites
 
-Python 3.10 or higher is required.
+- Python 3.10 or higher
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) package manager
 
 ## Configuration
 
-### [Amazon Q Developer CLI](https://github.com/aws/amazon-q-developer-cli)
+#### [Amazon Q Developer CLI](https://github.com/aws/amazon-q-developer-cli)
 
 For use with Amazon Q Developer CLI, add the following configuration to your MCP settings file:
 
@@ -45,7 +43,7 @@ For use with Amazon Q Developer CLI, add the following configuration to your MCP
   "mcpServers": {
     "aws-blackbelt-mcp-server": {
       "command": "uvx",
-      "args": ["aws-blackbelt-mcp-server==0.1.0rc1"]
+      "args": ["aws-blackbelt-mcp-server"]
     }
   },
   "tools": [
@@ -57,6 +55,7 @@ For use with Amazon Q Developer CLI, add the following configuration to your MCP
 
 ## Basic Usage
 
-Example:
+Examples:
 
 - "Find AWS Black Belt seminars about machine learning"
+- "Get transcript from this seminar video: https://youtu.be/vWfTe5MHOIk"
