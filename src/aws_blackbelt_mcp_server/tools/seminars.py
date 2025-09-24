@@ -4,31 +4,39 @@ import re
 from typing import Annotated, Any, Dict, List, Literal, Optional
 
 import httpx
+from fastmcp import FastMCP
 from fastmcp.tools.tool import ToolResult
 from loguru import logger
 from mcp.types import TextContent
 from pydantic import Field
 
 from aws_blackbelt_mcp_server.config import env
-from aws_blackbelt_mcp_server.server import mcp
 
 AWS_API_BASE_URL = "https://aws.amazon.com/api"
 YOUTUBE_REGEX = r'href="(https://youtu\.be/[^"]+)"'
 
+SEMINAR_TAG_NAMESPACE_ID = "GLOBAL#aws-tech-category"
 SEMINAR_DIRECTORY_ID = "events-cards-interactive-event-content-japan"
 SEMINAR_LOCALE = "ja_JP"
 SEMINAR_QUERY_OPERATOR = "AND"
 SEMINAR_SORT_BY = "item.additionalFields.publishedDate"
 
 
+def register_tools(mcp: FastMCP) -> None:
+    """Register tools."""
+    mcp.tool()(search_seminars)
+
+
 def _extract_categories_from_tags(tags: List[Dict[str, Any]]) -> List[str]:
     """Extract AWS tech categories from tags."""
     categories = []
+
     for tag in tags:
-        if tag.get("tagNamespaceId") == "GLOBAL#aws-tech-category":
+        if tag.get("tagNamespaceId") == SEMINAR_TAG_NAMESPACE_ID:
             tag_name = tag.get("name")
             if tag_name and tag_name not in categories:
                 categories.append(tag_name)
+
     return categories
 
 
@@ -44,7 +52,6 @@ def _extract_youtube_url(body: str) -> Optional[str]:
     return None
 
 
-@mcp.tool()
 async def search_seminars(
     query: Annotated[
         str,
@@ -99,19 +106,15 @@ async def search_seminars(
                 body = additional_fields.get("body", "")
                 youtube_url = _extract_youtube_url(body)
 
-                try:
-                    result = {
-                        "id": item.get("name", ""),
-                        "title": additional_fields.get("title", ""),
-                        "published_date": additional_fields.get("date", ""),
-                        "categories": categories,
-                        "pdf_url": additional_fields.get("ctaLink", ""),
-                        "youtube_url": youtube_url,
-                    }
-                    results.append(result)
-                except Exception as item_error:
-                    logger.warning(f"Failed to process item {item.get('name', 'unknown')}: {item_error}")
-                    continue
+                result = {
+                    "id": item.get("name", ""),
+                    "title": additional_fields.get("title", ""),
+                    "published_date": additional_fields.get("date", ""),
+                    "categories": categories,
+                    "pdf_url": additional_fields.get("ctaLink", ""),
+                    "youtube_url": youtube_url,
+                }
+                results.append(result)
 
             logger.info(f"Found {len(results)} seminars")
 
